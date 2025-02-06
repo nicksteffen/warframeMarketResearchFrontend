@@ -4,7 +4,7 @@ import styles from "../ItemPage.module.css";
 
 export default async function Page() {
     // const data = await fetch("http://localhost:8000/item/")
-    const data = await fetch("http://localhost:8000/item/mods")
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`)
     const json = await data.json();
 
     // const { mode, setMode } = useColorScheme();
