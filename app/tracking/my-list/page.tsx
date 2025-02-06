@@ -1,8 +1,9 @@
 import ItemList from '@/app/tracking/ItemList';
 
 export default async function Page() {
-    const data = await fetch("http://localhost:3001/all/prime-parts")
-    const primes = await data.json();
+    //const data = await fetch("http://localhost:3001/all/prime-parts")
+    //const primes = await data.json();
+    const primes = {data: []};
 
     return (
         <div>
