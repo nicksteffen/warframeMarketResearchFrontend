@@ -7,6 +7,8 @@ export default async function Page() {
     console.log("attempting to fetch mods");
     console.log(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`);
     const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`)
+    console.log("raw data:");
+    console.log(data);
     const json = await data.json();
 
     // const { mode, setMode } = useColorScheme();
@@ -20,12 +22,6 @@ export default async function Page() {
     const mods = json
         // .filter((item) => item.item_type == "MOD");
     console.log(mods);
-
-    // const theme = createTheme({
-    //     colorSchemes: {
-    //       dark: true,
-    //     },
-    //   });
 
     return (
         //todo make this a component?

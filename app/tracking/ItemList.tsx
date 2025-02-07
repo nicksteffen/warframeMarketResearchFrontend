@@ -2,7 +2,17 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
-export default async function ItemList({ items }) {
+
+type Item = {
+	item_name: string;
+	median_price: number;
+	volume: number;
+	wiki_link: string;
+	market_link: string;
+	_id: string;
+}
+
+export default async function ItemList({ items } : {items: Item[]} ) {
   "use server";
   console.log("item");
   console.log(items);
