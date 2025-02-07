@@ -1,15 +1,17 @@
 import ItemList from '@/app/tracking/ItemList';
 import styles from "../ItemPage.module.css";
+import {Item, ItemsList} from '@/app/types/Item';
+import { GetServerSideProps } from 'next';
 // import { ThemeProvider, createTheme, useColorScheme } from '@mui/material/styles';
 
-export default async function Page() {
+export default async function Page({data} : {data : ItemsList}) {
     // const data = await fetch("http://localhost:8000/item/")
     console.log("attempting to fetch mods");
     console.log(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`);
-    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`)
-    console.log("raw data:");
-    console.log(data);
-    const json = await data.json();
+    // const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`)
+    // console.log("raw data:");
+    // console.log(data);
+    // const json = await data.json();
 
     // const { mode, setMode } = useColorScheme();
     // if (!mode) {
@@ -19,9 +21,9 @@ export default async function Page() {
     // const mods = JSON.parse(json);
     // const mods = await data.json()
         // .filter((item) => item.item_type == "MOD");
-    const mods = json
+    // const mods = json
         // .filter((item) => item.item_type == "MOD");
-    console.log(mods);
+    // console.log(mods);
 
     return (
         //todo make this a component?
@@ -29,7 +31,22 @@ export default async function Page() {
         // no- probably not, we want my list to have add and delete features which would be part of this
         <div className={styles.item_table_container}>
             
-            <ItemList items={mods} ></ItemList>
+            {/* <ItemList items={mods} ></ItemList> */}
+            <ItemList items={data} ></ItemList>
         </div>
     )
 }
+
+
+
+export const getServerSideProps: GetServerSideProps = async() => {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/mods`)
+    const items : ItemsList  = await data.json();
+
+
+    return {
+        props: {
+            items,
+        },
+    };
+};

@@ -1,22 +1,16 @@
  "use server";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import {Item, ItemsList} from '@/app/types/Item';
 
 
-type Item = {
-	item_name: string;
-	median_price: number;
-	volume: number;
-	wiki_link: string;
-	market_link: string;
-	_id: string;
-}
 
-export default async function ItemList({ items } : {items: Item[]} ) {
+
+export default async function ItemList({ items } : {items: ItemsList }) {
   "use server";
   console.log("item");
   console.log(items);
-  const rows = items.map((item) => new Object({...item , id: item._id}));
+  const rows = items.items.map((item) => new Object({...item , id: item._id}));
 
 
 
