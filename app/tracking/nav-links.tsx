@@ -27,25 +27,28 @@
   // }
 
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { ListItemText, IconButton, ListItemButton, ListItemIcon } from "@mui/material";
-import {Inbox, Upgrade, Widgets, Settings, FormatListBulleted} from '@mui/icons-material'; 
+import { ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
+import {Widgets, Settings, FormatListBulleted} from '@mui/icons-material'; 
 
 const links = [
     {
+        order: 0,
         name: "Mods",
         href: "/tracking/mods",
         icon: <Widgets/>,
         // icon: AdjustmentsHorizontalIcon
     },
     {
+        order: 1,
         name: "Prime Parts",
         href: "/tracking/prime-parts",
         icon: <Settings/>,
         // icon: PuzzlePieceIcon
     },
     {
+        order: 2,
         name: "My List",
         href: "/tracking/my-list",
         icon: <FormatListBulleted/>,
@@ -62,7 +65,7 @@ const NavLinks = () => {
     <>
     {links.map((link) => {
       return (
-      <ListItemButton component={Link} href={link.href}>
+      <ListItemButton key={link.order} component={Link} href={link.href}>
         <ListItemIcon>
           {link.icon}
 

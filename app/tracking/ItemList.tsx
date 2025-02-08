@@ -1,19 +1,10 @@
-//  "use server";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import {ItemsList} from '@/app/types/Item';
 
 
-
-
 export default async function ItemList({ items } : {items: ItemsList }) {
-  // "use server";
-  console.log("item");
-  console.log(items);
   const rows = items.items.map((item) => new Object({...item , id: item._id}));
-
-
-
 
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70 },
