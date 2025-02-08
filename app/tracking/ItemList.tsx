@@ -1,13 +1,13 @@
- "use server";
+//  "use server";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import {Item, ItemsList} from '@/app/types/Item';
+import {ItemsList} from '@/app/types/Item';
 
 
 
 
 export default async function ItemList({ items } : {items: ItemsList }) {
-  "use server";
+  // "use server";
   console.log("item");
   console.log(items);
   const rows = items.items.map((item) => new Object({...item , id: item._id}));
@@ -24,7 +24,7 @@ export default async function ItemList({ items } : {items: ItemsList }) {
     { field: 'market_link', headerName: "Market Link", width: 130},
    
   ];
-  const paginationModel = { page: 0, pageSize: 5 };
+  const paginationModel = { page: 0, pageSize: 10 };
   return (
     <>
       <Paper sx={{ height: '100%', width: '100%' }}>

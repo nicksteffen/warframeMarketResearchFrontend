@@ -1,19 +1,18 @@
 import ItemList from '@/app/tracking/ItemList';
+import {ItemsList} from '@/app/types/Item';
+import styles from "../ItemPage.module.css";
 
 export default async function Page() {
     // const data = await fetch("http://localhost:8000/item/")
-    const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/primes`)	
-    const json = await data.json();
-    const mods = json
-    // .filter((item) => item.item_type == "COMPONENT");
-    console.log(mods);
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/primes`, {
+        next: {revalidate: 3600},
+    });
+    const json = await resp.json();
+    const data : ItemsList = {items: json};
 
     return (
-        <div>
-            <p> PRIMES: </p>
-                <h1>Item Details</h1>
-            
-            <ItemList items={mods} ></ItemList>
+        <div className={styles.item_table_container}>
+            <ItemList items={data} ></ItemList>
 
                 {/* mods.data.map((item, index) =>  */} 
         </div>
