@@ -1,4 +1,4 @@
-import ItemList from '@/app/tracking/ItemList';
+import ItemList from '@/app/components/ItemList';
 import {ItemsList} from '@/app/types/Item';
 import styles from "../ItemPage.module.css";
 

@@ -1,6 +1,7 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+// import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import {ItemsList} from '@/app/types/Item';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 
 export default async function ItemList({ items } : {items: ItemsList }) {
@@ -13,7 +14,7 @@ export default async function ItemList({ items } : {items: ItemsList }) {
     { field: 'volume', headerName: 'Volume sold ', width: 130, type: 'number'},
     { field: 'wiki_link', headerName: "Wiki Link", width: 130},
     { field: 'market_link', headerName: "Market Link", width: 130},
-   
+
   ];
   const paginationModel = { page: 0, pageSize: 10 };
   return (
