@@ -1,15 +1,15 @@
 "use client";
-import React, {useContext, useState, useCallback} from 'react';
-import Autocomplete, {AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material/Autocomplete';
+import React, { useState, useCallback} from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Item, ItemsList } from '@/app/types/Item';
 import { addItemToUserList } from '../actions/userActions';
 import { Box, Button, ListItem } from '@mui/material';
 
-interface ItemSelectorProps  {
-  item: Item | null;
-  input_options: ItemsList
-}
+// interface ItemSelectorProps  {
+//   item: Item | null;
+//   input_options: ItemsList
+// }
 
 export default function ItemSelector({ input_options } : {input_options: ItemsList} ) {
   const [item, setItem] = useState< Item | null>(null);
@@ -40,6 +40,7 @@ export default function ItemSelector({ input_options } : {input_options: ItemsLi
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
     <Autocomplete
+      autoComplete={true}
       value={item}
       options={input_options.items}
       getOptionLabel={(item) => item.item_name}

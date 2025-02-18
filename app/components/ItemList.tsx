@@ -1,11 +1,35 @@
 // import { DataGrid, GridColDef } from '@mui/x-data-grid';
+"use client"
 import Paper from '@mui/material/Paper';
 import {ItemsList} from '@/app/types/Item';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridCallbackDetails } from '@mui/x-data-grid';
+import { Dispatch, SetStateAction } from 'react';
 
 
-export default async function ItemList({ items } : {items: ItemsList }) {
+// type HandleRowSelectionModelChangeFunction = (
+//   selectionModel : GridRowSelectionModel,
+//   details : GridCallbackDetails
+// ) => void;
+// }
+
+
+// export default async function ItemList({ items, handleSelectionChange } : {items: ItemsList, handleSelectionChange: any}) {
+export default function ItemList({ items, handleSelectionChange } : {items: ItemsList, handleSelectionChange: 
+  Dispatch<SetStateAction<string[]>> | undefined }) {
+  // GridRowSelectionModel}) {
+  // HandleRowSelectionModelChangeFunction | undefined}) {
+  // func }) {
   const rows = items.items.map((item) => new Object({...item , id: item._id}));
+
+  const handleSelectionChangeModel = (selectionModel: GridRowSelectionModel, details: GridCallbackDetails) => {
+    const selectedIds = selectionModel.map((id) => id.toString());
+    // todo, need to either remove or do something with 'details'
+    console.log(details);
+    // todo remove the ! after changing typing to remove the option of undefined
+    handleSelectionChange!(selectedIds);
+    // const selectedRows = selectedIds.map((id) => rows.find((row) => row.id === id));
+    // console.log(selectedRows)ItemsList;
+  };
 
   const columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70 },
@@ -27,6 +51,7 @@ export default async function ItemList({ items } : {items: ItemsList }) {
           pageSizeOptions={[5, 10,25, 50]}
           checkboxSelection
           sx={{ border: 0 }}
+          onRowSelectionModelChange={handleSelectionChangeModel}
           // getRowId={(row) => row._id}
         />
       </Paper>

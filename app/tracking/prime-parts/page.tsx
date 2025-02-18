@@ -12,7 +12,8 @@ export default async function Page() {
 
     return (
         <div className={styles.item_table_container}>
-            <ItemList items={data} ></ItemList>
+            {/* <ItemList items={data} ></ItemList> */}
+            <ItemList items={data} handleSelectionChange={undefined} ></ItemList>
 
                 {/* mods.data.map((item, index) =>  */} 
         </div>
