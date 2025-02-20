@@ -7,17 +7,13 @@ import { ItemsList } from "@/app/types/Item";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { deleteItemsFromUserList } from "@/app/actions/userActions";
+import DeleteButton from "@/app/components/DeleteButton";
+import { GridColDef } from "@mui/x-data-grid";
 
 
 
 
-// export default function ItemSelector({ input_options } : {input_options: ItemsList} ) {
 export default function ListManager({all_items, my_items} : {all_items: ItemsList, my_items: ItemsList}) {
-    // const 
-    // const emptyItemsList : ItemsList = {items:[]};
-    // const [selectedItems, setSelectedItems] = useState<ItemsList>(emptyItemsList);
-
-
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
 
     const deleteSelected = () => {
@@ -28,17 +24,38 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
             selectedItemIds);
     }
 
+
+    const deleteOneItem = (itemId: string) => {
+        console.log("delete one item");
+        console.log(itemId);
+        const userId = "user1";
+        deleteItemsFromUserList(userId,
+            [itemId]);
+    }
+
+    const additionalCols : GridColDef[] = [
+        {
+            field: 'delete1',
+            headerName: 'Delete',
+            width: 150,
+            renderCell: (params) => (
+                <DeleteButton buttonAction={() => deleteOneItem(params.row.id)} buttonText="Delete"></DeleteButton>
+            ),
+        },
+    ];
+
     return (
         <div>
             <h1>List Manager</h1>
         <ItemSelector input_options={all_items}/>
 
         {/* todo this was applying style differently before */}
+
         <div className={styles.item_table_container}>
             {/* <ItemList items={my_items}  handleSelectionChange={setSelectedItems}></ItemList> */}
-            <ItemList items={my_items}  handleSelectionChange={setSelectedItemIds}></ItemList>
+            <ItemList items={my_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
         </div>
-        <Button onClick={deleteSelected}>Delete Selected</Button>
+        <DeleteButton buttonAction={deleteSelected} buttonText="Delete Selected"></DeleteButton>
         </div>
     )
 }

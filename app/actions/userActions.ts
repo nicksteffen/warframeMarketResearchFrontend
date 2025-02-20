@@ -1,6 +1,7 @@
 "use server"
 
 import { Item, ItemsList } from "../types/Item";
+import {revalidatePath} from 'next/cache'
 
 
 
@@ -36,6 +37,7 @@ export async function deleteItemsFromUserList(user_id: string, items : string[])
  
      const respData = await resp.json();
      console.log(respData);
+    revalidatePath('/');
 
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -81,6 +83,8 @@ export async function addItemToUserList(user_id: string, item: Item | null) {
 
     const respData = await resp.json();
     console.log(respData);
+    console.log("revalidating");
+    revalidatePath('/');
 
 
 } catch (error) {

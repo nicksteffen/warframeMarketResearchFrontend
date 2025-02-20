@@ -2,23 +2,20 @@
 "use client"
 import Paper from '@mui/material/Paper';
 import {ItemsList} from '@/app/types/Item';
-import { DataGrid, GridColDef, GridRowSelectionModel, GridCallbackDetails } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridCallbackDetails, GridRenderCellParams } from '@mui/x-data-grid';
 import { Dispatch, SetStateAction } from 'react';
+import { Button } from '@mui/material';
+import Link from 'next/link';
 
 
-// type HandleRowSelectionModelChangeFunction = (
-//   selectionModel : GridRowSelectionModel,
-//   details : GridCallbackDetails
-// ) => void;
-// }
+interface ItemListProps {
+  items: ItemsList; // Replace `ItemsList` with the actual type of `items`
+  handleSelectionChange?: Dispatch<SetStateAction<string[]>>; // Optional
+  additionalCols?: GridColDef[]; // Optional
+}
 
-
-// export default async function ItemList({ items, handleSelectionChange } : {items: ItemsList, handleSelectionChange: any}) {
-export default function ItemList({ items, handleSelectionChange } : {items: ItemsList, handleSelectionChange: 
-  Dispatch<SetStateAction<string[]>> | undefined }) {
-  // GridRowSelectionModel}) {
-  // HandleRowSelectionModelChangeFunction | undefined}) {
-  // func }) {
+// Use the defined type in the function signature
+export default function ItemList({ items, handleSelectionChange, additionalCols }: ItemListProps) {
   const rows = items.items.map((item) => new Object({...item , id: item._id}));
 
   const handleSelectionChangeModel = (selectionModel: GridRowSelectionModel, details: GridCallbackDetails) => {
@@ -27,19 +24,45 @@ export default function ItemList({ items, handleSelectionChange } : {items: Item
     console.log(details);
     // todo remove the ! after changing typing to remove the option of undefined
     handleSelectionChange!(selectedIds);
-    // const selectedRows = selectedIds.map((id) => rows.find((row) => row.id === id));
-    // console.log(selectedRows)ItemsList;
   };
 
-  const columns: GridColDef[] = [
+  // const columns: GridColDef[] = [
+  const baseCols: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 70 },
     { field: 'item_name', headerName: 'Item name', width: 130 },
     { field: 'median_price', headerName: 'Median price', width: 130, type: 'number'},
     { field: 'volume', headerName: 'Volume sold ', width: 130, type: 'number'},
-    { field: 'wiki_link', headerName: "Wiki Link", width: 130},
-    { field: 'market_link', headerName: "Market Link", width: 130},
+    { field: 'market_link',
+      headerName: "Market Link", 
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => (
+        <Button variant="contained" color="primary" >
+          <Link href={params.row.market_link}  target="_blank">
+            Warframe Market
+            
+          </Link>
+        </Button>
+      ),
+    },
+    { field: 'wiki_link', 
+      headerName: "Wiki Link", 
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => (
+        <Button variant="contained" color="primary" >
+          <Link href={params.row.wiki_link}  target="_blank">
+            WIKI
 
+          </Link>
+        </Button>
+      ),
+    },
   ];
+
+
+  const columns: GridColDef[] = additionalCols ? baseCols.concat(additionalCols) : baseCols;
+
+
+
   const paginationModel = { page: 0, pageSize: 10 };
   return (
     <>
