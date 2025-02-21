@@ -10,21 +10,15 @@ import { useState } from "react";
 
 
 export default function ResearchGrid({items} : {items: ItemsList}) {
-    const userId = "user1";
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
-    // const handleSelectionChange = (selectedIds: string[]) => {
-        // setSelectedItemIds(selectedIds);
-    // };
-
     const addSelected = () => {
-        addItemsToUserList(userId, selectedItemIds)
+        addItemsToUserList(selectedItemIds)
     }
 
     const addToList = (itemId: string) => {
         console.log("add to list");
         console.log(itemId);
-        addItemsToUserList(userId, [itemId]);
-
+        addItemsToUserList([itemId]);
     }
 
     const additionalCols = [
@@ -38,8 +32,6 @@ export default function ResearchGrid({items} : {items: ItemsList}) {
                     ),
                 }
         ];
-
-
 
     return (
         <>

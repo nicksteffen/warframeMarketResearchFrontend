@@ -28,7 +28,7 @@ export default function ItemSelector({ input_options } : {input_options: ItemsLi
       return;
     }
     try {
-      await addItemsToUserList(userId, [selectedItem._id]);
+      await addItemsToUserList([selectedItem._id]);
     } catch (error) {
       console.error('Failed to add item:', error);
     }

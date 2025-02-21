@@ -3,10 +3,7 @@ import ListManager from '@/app/components/ListManager';
 
 
 export default async function Page() {
-
-    const user = "user1";
     const time : number = Number(process.env.NEXT_PUBLIC_API_CACHE_TIME) || 3600;
-
     const data : ItemsList = {items: []};
 
     const all_items_resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item`, {

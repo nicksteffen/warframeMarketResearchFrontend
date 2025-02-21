@@ -1,10 +1,10 @@
-// import { Login } from "@mui/icons-material";
-
+import { Suspense } from "react";
 import Login from "./Login";
 
 export default function Page() {
     return (
-        // <p> LOGIN PAGE</p>
-        <Login></Login>
+        <Suspense>
+            <Login/>
+        </Suspense>
     )
 }

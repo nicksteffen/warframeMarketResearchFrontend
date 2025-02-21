@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams} from 'next/navigation';
 import { Container, Typography, TextField, Button, Box, Link } from '@mui/material';
 import Cookies from 'js-cookie';
+import { setCookie } from 'cookies-next'
 
 // Define the form data interface
 interface FormData {
@@ -63,6 +64,8 @@ export default function Login() {
             // todo re-enable redirect after debug
             // Redirect to the dashboard or home page after successful login
             Cookies.set('token', access_token); // Store token in cookies
+            setCookie('access_token', access_token);
+            // (await cookies()).set('access_token', access_token);
             router.push(redirect || '/');
         } else {
             const data = await response.json();

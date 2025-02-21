@@ -14,7 +14,6 @@ import Cookies from 'js-cookie';
 import { Button } from "@mui/material";
 
 export default function ListManager({all_items, my_items} : {all_items: ItemsList, my_items: ItemsList}) {
-    const userId = "user1";
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
     const [user_items, setUserItems] = useState<ItemsList>(my_items);
     // todo this should not exist, but when we get a token, we should be handling the user from the cookies on the backend
@@ -23,17 +22,14 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
         console.log("delete selected");
         console.log(selectedItemIds);
         // userId is being set as const, but should be sending the userid by getting it from cookies
-        deleteItemsFromUserList(userId,
-            selectedItemIds);
+        deleteItemsFromUserList(selectedItemIds);
     }
 
 
     const deleteOneItem = (itemId: string) => {
         console.log("delete one item");
         console.log(itemId);
-        const userId = "user1";
-        deleteItemsFromUserList(userId,
-            [itemId]);
+        deleteItemsFromUserList([itemId]);
     }
 
     const additionalCols : GridColDef[] = [
@@ -48,7 +44,7 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
     ];
     const testButton = () => {
         console.log("test button");
-        tester(Cookies.get('token'));
+        tester();
     }
     const fetchMyItems = async () => {
         console.log("fetch my items")
@@ -77,7 +73,7 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
             const redirectUrl = encodeURIComponent(pathname);
             router.push(`/login?redirect=${redirectUrl}`);
         }
-        fetchMyItems(token);
+        fetchMyItems();
     }, [router, pathname]);
 
 
