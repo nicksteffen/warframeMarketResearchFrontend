@@ -3,7 +3,7 @@ import React, { useState, useCallback} from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Item, ItemsList } from '@/app/types/Item';
-import { addItemToUserList } from '../actions/userActions';
+import { addItemsToUserList } from '../actions/userActions';
 import { Box, Button, ListItem } from '@mui/material';
 
 // interface ItemSelectorProps  {
@@ -12,6 +12,7 @@ import { Box, Button, ListItem } from '@mui/material';
 // }
 
 export default function ItemSelector({ input_options } : {input_options: ItemsList} ) {
+  const user = "user1";
   const [item, setItem] = useState< Item | null>(null);
 
   const handleChange = (
@@ -27,14 +28,14 @@ export default function ItemSelector({ input_options } : {input_options: ItemsLi
       return;
     }
     try {
-      await addItemToUserList(userId, selectedItem);
+      await addItemsToUserList(userId, [selectedItem._id]);
     } catch (error) {
       console.error('Failed to add item:', error);
     }
   }, []);
 
   const onClick = useCallback(() => {
-    handleAddItem('user_id', item);
+    handleAddItem(user, item);
   }, [handleAddItem, item]);
 
   return (

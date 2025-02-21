@@ -21,9 +21,12 @@ export default function ItemList({ items, handleSelectionChange, additionalCols 
   const handleSelectionChangeModel = (selectionModel: GridRowSelectionModel, details: GridCallbackDetails) => {
     const selectedIds = selectionModel.map((id) => id.toString());
     // todo, need to either remove or do something with 'details'
+    console.log("handle details");
     console.log(details);
     // todo remove the ! after changing typing to remove the option of undefined
-    handleSelectionChange!(selectedIds);
+    if (handleSelectionChange) {
+      handleSelectionChange(selectedIds);
+    }
   };
 
   // const columns: GridColDef[] = [
