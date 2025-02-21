@@ -2,17 +2,13 @@
 import { ItemsList } from "../types/Item";
 import {revalidatePath} from 'next/cache'
 import { cookies } from 'next/headers'
-import AccessTokenError from "../errors/AccessTokenError";
-import { redirect } from "next/navigation";
-import { UserGroupIcon } from "@heroicons/react/16/solid";
 
 
 export async function deleteItemsFromUserList(items : string[]) {
     // const data = JSON.stringify({
     const authToken =await get_auth_token();
     if (authToken === undefined) {
-        // todo define auth error here to catch and redirect to login
-        throw new Error("No auth token found");
+        return {"status" : "error", "message": "No auth token found"}
     }
     const data = {
         itemIds: items
@@ -27,14 +23,14 @@ export async function deleteItemsFromUserList(items : string[]) {
             body: JSON.stringify(data),
         });
         if (!resp.ok) {
-            throw new Error(`HTTP error! Status: ${resp.status}`);
+            return {"status" : "error", "message": `Response returned with error status ${resp.status}`};
         }
-        const respData = await resp.json();
-        console.log(respData);
+        // const respData = await resp.json();
+        // console.log(respData);
         revalidatePath('/');
     } catch (error) {
         console.log(`Error: ${error}`);
-        throw error;
+        return {"status" : "error", "message": `Caught an error ${error}`};
     }
 }
 
@@ -51,9 +47,6 @@ export async function get_user_watchlist() {
         console.log("throwing access token erro");
         const emptyItemsList : ItemsList = {items: []};
         return {status: "error", itemsList : emptyItemsList};
-        // throw new AccessTokenError('Access token is invalid', 403, 'TOKEN_INVALID');
-        // redirect(`/login?redirect=/tracking/my-list`);
-        // throw new Error("No auth token found");
     }
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/user/watchlist`, {
         next: {revalidate: 0},
@@ -64,12 +57,14 @@ export async function get_user_watchlist() {
         },
     
     });
+    if (!resp.ok) {
+        console.log("error getting watchlist");
+        const emptyItemsList : ItemsList = {items: []};
+        return {status: "error", itemsList : emptyItemsList};
+    }
     const json = await resp.json()
-    // const data : ItemsList = {items: json ? json : []};
     const itemsList : ItemsList = {items: json ? json : []};
     const data : watchlistResponse = {status: "success", itemsList: itemsList};
-    console.log("watchlist data");
-    console.log(data);
     return data;
 }
 
@@ -112,6 +107,9 @@ export async function addItemsToUserList(itemIds: string[] | null) {
         itemIds: itemIds
     }
     const authToken = await get_auth_token();
+    if (authToken === undefined) {
+        return {"status" : "error", "message": "No auth token found"}
+    }
 
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/user/watchlist/add`, {
        method: 'POST',
@@ -124,12 +122,9 @@ export async function addItemsToUserList(itemIds: string[] | null) {
 
 
     if (!resp.ok) {
-        throw new Error(`HTTP error! Status: ${resp.status}`);
+        return {"status": "error", "message":`HTTP error! Status: ${resp.status}`};
     }
-
-
-    const respData = await resp.json();
-    console.log(respData);
+    // const respData = await resp.json();
     console.log("revalidating");
     revalidatePath('/');
 

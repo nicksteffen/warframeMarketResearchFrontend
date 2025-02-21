@@ -4,7 +4,6 @@ import ListManager from '@/app/components/ListManager';
 
 export default async function Page() {
     const time : number = Number(process.env.NEXT_PUBLIC_API_CACHE_TIME) || 3600;
-    const data : ItemsList = {items: []};
 
     const all_items_resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item`, {
         next: {revalidate: time}, });
@@ -13,7 +12,7 @@ export default async function Page() {
 
     return (
         <>
-        <ListManager all_items={all_items} my_items={data} ></ListManager>
+        <ListManager all_items={all_items}></ListManager>
         </>
     )
 }
