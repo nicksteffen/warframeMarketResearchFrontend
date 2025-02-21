@@ -74,7 +74,7 @@ export async function get_user_watchlist() {
 }
 
 
-export async function get_auth_token(authTokenName="auth_token") {
+export async function get_auth_token(authTokenName="access_token") {
     const token = (await cookies()).get(authTokenName);
     return token ? token.value : undefined;
 }
