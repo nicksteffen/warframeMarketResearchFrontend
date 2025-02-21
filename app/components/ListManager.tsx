@@ -11,11 +11,25 @@ import { GridColDef } from "@mui/x-data-grid";
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Button } from "@mui/material";
+import { AlertColor, Button } from "@mui/material";
+import AccessTokenError from "../errors/AccessTokenError";
+import { getCookie } from "cookies-next";
+import AlertSnackbar from "./AlertSnackbar";
 
 export default function ListManager({all_items, my_items} : {all_items: ItemsList, my_items: ItemsList}) {
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
     const [user_items, setUserItems] = useState<ItemsList>(my_items);
+
+    // Alert Snackbar Setup
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('info');
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
+
+
     // todo this should not exist, but when we get a token, we should be handling the user from the cookies on the backend
 
     const deleteSelected = () => {
@@ -48,16 +62,29 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
     }
     const fetchMyItems = async () => {
         console.log("fetch my items")
-        // if (!token) {
-            // console.log("no token")
-            // return;
-        // }
         try {
             const data = await get_user_watchlist();
-            setUserItems(data);
+
+            if (data.status === "error") {
+                setSnackbarMessage('Redirecting to the Login...');
+                setSnackbarSeverity('info');
+                setSnackbarOpen(true);
+                console.log("error fetching items");
+                setTimeout(() => {
+                    router.push(`/login?redirect=${pathname}`);
+                }, 2000);
+                
+            }
+            setUserItems(data.itemsList);
         } catch (error) {
-            console.log("error fetching items");
-            console.log(error);
+            if (AccessTokenError.isAccessTokenError(error)) {
+                // Handle access token error, e.g., redirect to login or show an error notifi
+                console.log("access token error");
+            }
+            else {
+                console.log("Undefined error fetching items");
+                console.log(error);
+            }
         }
 
      }
@@ -67,7 +94,8 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
     const pathname = usePathname();
 
     useEffect(() => {
-        const token = Cookies.get('token'); // Check if the user is authenticated
+        const token = getCookie('access_token'); // Check if the user is authenticated
+        // const token = Cookies.get('token'); // Check if the user is authenticated
         if (!token) {
             // Redirect to login with the current URL as a query parameter
             const redirectUrl = encodeURIComponent(pathname);
@@ -80,8 +108,14 @@ export default function ListManager({all_items, my_items} : {all_items: ItemsLis
 
     return (
         <div>
-            <p>My Items</p>
-            <Button onClick={testButton}>Test</Button>
+        <AlertSnackbar
+            open={snackbarOpen}
+            onClose={handleCloseSnackbar}
+            message={snackbarMessage}
+            severity={snackbarSeverity}
+        />
+        <p>My Items</p>
+        <Button onClick={testButton}>Test</Button>
         <ItemSelector input_options={all_items}/>
         <ItemList items={user_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
         <DeleteButton buttonAction={deleteSelected} buttonText="Delete Selected"></DeleteButton>

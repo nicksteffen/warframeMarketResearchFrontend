@@ -2,6 +2,9 @@
 import { ItemsList } from "../types/Item";
 import {revalidatePath} from 'next/cache'
 import { cookies } from 'next/headers'
+import AccessTokenError from "../errors/AccessTokenError";
+import { redirect } from "next/navigation";
+import { UserGroupIcon } from "@heroicons/react/16/solid";
 
 
 export async function deleteItemsFromUserList(items : string[]) {
@@ -37,11 +40,20 @@ export async function deleteItemsFromUserList(items : string[]) {
 
 
 export async function get_user_watchlist() {
+    interface watchlistResponse {
+        status: string,
+        itemsList: ItemsList
+    }
     console.log("getting watchlist");
     const authToken =await get_auth_token();
     if (authToken === undefined) {
         // todo define auth error here to catch and redirect to login
-        throw new Error("No auth token found");
+        console.log("throwing access token erro");
+        const emptyItemsList : ItemsList = {items: []};
+        return {status: "error", itemsList : emptyItemsList};
+        // throw new AccessTokenError('Access token is invalid', 403, 'TOKEN_INVALID');
+        // redirect(`/login?redirect=/tracking/my-list`);
+        // throw new Error("No auth token found");
     }
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/user/watchlist`, {
         next: {revalidate: 0},
@@ -53,7 +65,11 @@ export async function get_user_watchlist() {
     
     });
     const json = await resp.json()
-    const data : ItemsList = {items: json ? json : []};
+    // const data : ItemsList = {items: json ? json : []};
+    const itemsList : ItemsList = {items: json ? json : []};
+    const data : watchlistResponse = {status: "success", itemsList: itemsList};
+    console.log("watchlist data");
+    console.log(data);
     return data;
 }
 
