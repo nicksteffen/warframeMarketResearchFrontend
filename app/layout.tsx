@@ -7,6 +7,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 //import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import darkTheme from './src/theme';
+import SideNav from "./sidenav";
 
 //const roboto = Roboto({
 //  weight: ['300', '400', '500', '700'],
@@ -37,13 +38,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-       <AppRouterCacheProvider>
-       <ThemeProvider theme={darkTheme}>
-           {children}
-           </ThemeProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={darkTheme}>
+            <div className="w-full flex-none md:w-64">
+              <SideNav />
+            </div>
+            {children}
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

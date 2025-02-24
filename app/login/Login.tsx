@@ -9,7 +9,6 @@ import { setCookie } from 'cookies-next'
 // Define the form data interface
 interface FormData {
   email: string;
-  username: string;
   password: string;
 }
 
@@ -24,7 +23,6 @@ export default function Login() {
     const router = useRouter();
     const [formData, setFormData] = useState<FormData>({
         email: '',
-        username: '',
         password: '',
     });
     const searchParams = useSearchParams();
@@ -42,7 +40,8 @@ export default function Login() {
         setError('');
 
         // Basic validation
-        if ((!formData.email || !formData.username) || !formData.password) {
+        // if ((!formData.email || !formData.username) || !formData.password) {
+        if (!formData.email || !formData.password) {
         setError('All fields are required.');
         return;
         }
@@ -56,16 +55,10 @@ export default function Login() {
 
 
         if (response.ok) {
-            // // const { access_token } = response.data;
             const data: LoginResponse = await response.json();
             const { access_token } = data;
-            // console.log("access token");
-            // console.log(access_token);
-            // todo re-enable redirect after debug
-            // Redirect to the dashboard or home page after successful login
             Cookies.set('token', access_token); // Store token in cookies
             setCookie('access_token', access_token);
-            // (await cookies()).set('access_token', access_token);
             router.push(redirect || '/');
         } else {
             const data = await response.json();
@@ -101,8 +94,8 @@ export default function Login() {
                 value={formData.email}
                 onChange={handleChange}
             />
-            OR
-            <TextField
+            {/* OR */}
+            {/* <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -113,7 +106,7 @@ export default function Login() {
                 autoFocus
                 value={formData.username}
                 onChange={handleChange}
-            />
+            /> */}
 
             <TextField
                 margin="normal"
