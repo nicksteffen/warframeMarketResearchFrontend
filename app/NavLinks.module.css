@@ -1,0 +1,16 @@
+.nav_links {
+    width: 200px; /* Default width */
+    transition: width 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .nav_links {
+        width: 300px; /* Width on larger screens */
+    }
+}
+
+@media (min-width: 1440px) {
+    .nav_links {
+        width: 600px; /* Width on extra-large screens */
+    }
+}
