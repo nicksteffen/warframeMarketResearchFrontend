@@ -1,7 +1,4 @@
-import Image from "next/image";
 import HomePage from "./HomePage";
-
-
 
 // TODO need to restyle, well actually just implement the home page at all
 export default function Home() {
