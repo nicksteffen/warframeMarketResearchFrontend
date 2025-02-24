@@ -1,6 +1,6 @@
 
-import { Box, Button, Container, Grid, Link, Typography } from "@mui/material"
-import styles from "./HomePage.module.css"
+import { Box, Button, Container, Typography } from "@mui/material"
+import Grid from '@mui/material/Grid2';
 
 export default function HomePage() {
     return (
@@ -15,17 +15,17 @@ export default function HomePage() {
   
           {/* Navigation Buttons */}
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 4 }}>
-            <Grid item>
+            <Grid>
               <Button href="/tracking/prime-parts" variant="contained" color="primary" size="large">
                 Prime Parts
               </Button>
             </Grid>
-            <Grid item>
+            <Grid>
               <Button href="/tracking/mods" variant="contained" color="primary" size="large">
                 Mods
               </Button>
             </Grid>
-            <Grid item>
+            <Grid>
               <Button href="/tracking/my-list" variant="contained" color="secondary" size="large">
                 My List
               </Button>
