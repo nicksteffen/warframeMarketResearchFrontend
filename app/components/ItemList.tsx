@@ -37,7 +37,7 @@ export default function ItemList({ items, handleSelectionChange, additionalCols 
     { field: 'volume', headerName: 'Volume sold ', width: 130, type: 'number'},
     { field: 'market_link',
       headerName: "Market Link", 
-      width: 150,
+      width: 180,
       renderCell: (params: GridRenderCellParams) => (
         <Button variant="contained" color="primary" >
           <Link href={params.row.market_link}  target="_blank">

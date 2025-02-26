@@ -1,6 +1,7 @@
 
 import { Box, Button, Container, Typography } from "@mui/material"
 import Grid from '@mui/material/Grid2';
+import Footer from "./components/Footer";
 
 export default function HomePage() {
     return (
@@ -38,7 +39,9 @@ export default function HomePage() {
               Login
             </Button>
           </Box>
-        </Box>
-      </Container>
+      </Box>
+
+
+    </Container>
     )
 };

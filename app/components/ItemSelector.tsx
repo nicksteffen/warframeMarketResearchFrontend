@@ -6,13 +6,13 @@ import { Item, ItemsList } from '@/app/types/Item';
 import { addItemsToUserList } from '../actions/userActions';
 import { Box, Button, ListItem } from '@mui/material';
 
-// interface ItemSelectorProps  {
-//   item: Item | null;
-//   input_options: ItemsList
-// }
+interface ItemSelectorProps  {
+  onButtonClick: (itemId: string) => void;
+  input_options: ItemsList
+}
 
-export default function ItemSelector({ input_options } : {input_options: ItemsList} ) {
-  const user = "user1";
+export default function ItemSelector({ input_options, onButtonClick } : ItemSelectorProps) {
+  // {input_options: ItemsList} ) {
   const [item, setItem] = useState< Item | null>(null);
 
   const handleChange = (
@@ -22,20 +22,23 @@ export default function ItemSelector({ input_options } : {input_options: ItemsLi
     setItem(newItem);
   }
 
-  const handleAddItem = useCallback(async (userId: string, selectedItem: Item | null) => {
+  const handleAddItem = useCallback(async (selectedItem: Item | null) => {
     if (!selectedItem) {
       console.error('No item selected');
       return;
     }
-    try {
-      await addItemsToUserList([selectedItem._id]);
-    } catch (error) {
-      console.error('Failed to add item:', error);
-    }
+    console.log("Adding item id");
+    console.log(selectedItem._id);
+    onButtonClick(selectedItem._id);
+    // try {
+    //   await addItemsToUserList([selectedItem._id]);
+    // } catch (error) {
+    //   console.error('Failed to add item:', error);
+    // }
   }, []);
 
   const onClick = useCallback(() => {
-    handleAddItem(user, item);
+    handleAddItem(item);
   }, [handleAddItem, item]);
 
   return (

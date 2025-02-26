@@ -5,7 +5,7 @@ import ItemSelector from "@/app/components/ItemSelector";
 // import styles from "@/ItemPage.module.css";
 import { ItemsList } from "@/app/types/Item";
 import { useCallback, useState } from "react";
-import { deleteItemsFromUserList, get_user_watchlist, tester } from "@/app/actions/userActions";
+import { addItemsToUserList, deleteItemsFromUserList, get_user_watchlist, tester } from "@/app/actions/userActions";
 import DeleteButton from "@/app/components/DeleteButton";
 import { GridColDef } from "@mui/x-data-grid";
 import { usePathname, useRouter } from 'next/navigation';
@@ -19,6 +19,7 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
     const data : ItemsList = {items: []};
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
     const [user_items, setUserItems] = useState<ItemsList>(data);
+    const [userItemIds, setUserItemsIds] = useState<string[]>([]);
 
     // Alert Snackbar Setup
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -32,36 +33,31 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
 
     // todo this should not exist, but when we get a token, we should be handling the user from the cookies on the backend
 
-    const deleteSelected = async () => {
-        console.log("delete selected");
-        console.log(selectedItemIds);
-        // userId is being set as const, but should be sending the userid by getting it from cookies
-        const resp = await deleteItemsFromUserList(selectedItemIds);
+    const deleteItems = async (itemIds : string[]) => {
+        const resp = await deleteItemsFromUserList(itemIds);
         if (!resp || resp.status == "error") {
             setSnackbarMessage('Error deleting items');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         } else {
-            setSnackbarMessage('Items deleted successfully');
+            setSnackbarMessage(`${itemIds.length ? "Items" : "Item"} deleted successfully`);
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
+            fetchMyItems();
         }
+    }
+
+    const deleteSelected = async () => {
+        console.log("delete selected");
+        console.log(selectedItemIds);
+        deleteItems(selectedItemIds);
     }
 
 
     const deleteOneItem = async (itemId: string) => {
         console.log("delete one item");
         console.log(itemId);
-        const resp = await deleteItemsFromUserList([itemId]);
-        if (!resp || resp.status == "error") {
-            setSnackbarMessage('Error deleting items');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-        } else {
-            setSnackbarMessage('Items deleted successfully');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-        }
+        deleteItems([itemId]);
     }
 
     const additionalCols : GridColDef[] = [
@@ -114,6 +110,21 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
         }
 
      }, [router, pathname]);
+
+
+    const addItem = async (item_id: string) => {   
+        try {
+            const data = await addItemsToUserList([item_id]);
+            if (data && data.status === "success") {
+                setSnackbarMessage('Item added successfully');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                fetchMyItems();
+            }
+        } catch (error) {
+            console.error('Failed to add item:', error);
+        }
+    }
    
  
 
@@ -140,7 +151,7 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
         />
         <p>My Items</p>
         <Button onClick={testButton}>Test</Button>
-        <ItemSelector input_options={all_items}/>
+        <ItemSelector input_options={all_items} onButtonClick={addItem}/>
         <ItemList items={user_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
         <DeleteButton buttonAction={deleteSelected} buttonText="Delete Selected"></DeleteButton>
         </div>

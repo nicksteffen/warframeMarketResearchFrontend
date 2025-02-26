@@ -2,42 +2,10 @@
 import React from "react";
 import Link from "next/link";
 import { ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
-import { Home, Widgets, Settings, FormatListBulleted, Login} from '@mui/icons-material'; 
+import SideNavLinks from "./types/SideNavLinks";
 
-const links = [
-    {
-       order: -1,
-        name: "Home",
-        href: "/",
-        icon: <Home/>,
-    },
-    {
-        order: 0,
-        name: "Mods",
-        href: "/tracking/mods",
-        icon: <Widgets/>,
-    },
-    {
-        order: 1,
-        name: "Prime Parts",
-        href: "/tracking/prime-parts",
-        icon: <Settings/>,
-    },
-    {
-        order: 2,
-        name: "My List!",
-        href: "/tracking/my-list",
-        icon: <FormatListBulleted/>,
 
-    },
-    {
-       order: 3,
-        name: "Login",
-        href: "/login",
-        icon: <Login/>,
-    },
-
-]
+const links = SideNavLinks;
 
 const NavLinks = () => {
   return (

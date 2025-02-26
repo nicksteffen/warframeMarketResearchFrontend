@@ -5,7 +5,6 @@ import { cookies } from 'next/headers'
 
 
 export async function deleteItemsFromUserList(items : string[]) {
-    // const data = JSON.stringify({
     const authToken =await get_auth_token();
     if (authToken === undefined) {
         return {"status" : "error", "message": "No auth token found"}
@@ -25,9 +24,8 @@ export async function deleteItemsFromUserList(items : string[]) {
         if (!resp.ok) {
             return {"status" : "error", "message": `Response returned with error status ${resp.status}`};
         }
-        // const respData = await resp.json();
-        // console.log(respData);
         revalidatePath('/');
+        return  {"status" : "success", "message": "Successfully deleted items from watchlist"};
     } catch (error) {
         console.log(`Error: ${error}`);
         return {"status" : "error", "message": `Caught an error ${error}`};
@@ -44,7 +42,7 @@ export async function get_user_watchlist() {
     const authToken =await get_auth_token();
     if (authToken === undefined) {
         // todo define auth error here to catch and redirect to login
-        console.log("throwing access token erro");
+        console.log("throwing access token error");
         const emptyItemsList : ItemsList = {items: []};
         return {status: "error", itemsList : emptyItemsList};
     }
@@ -55,6 +53,7 @@ export async function get_user_watchlist() {
             "Content-Type": "application/json", 
             "Authorization": `Bearer ${authToken}`
         },
+
     
     });
     if (!resp.ok) {
@@ -65,6 +64,7 @@ export async function get_user_watchlist() {
     const json = await resp.json()
     const itemsList : ItemsList = {items: json ? json : []};
     const data : watchlistResponse = {status: "success", itemsList: itemsList};
+    revalidatePath('/');
     return data;
 }
 
@@ -98,40 +98,66 @@ export async function tester() {
 
 export async function addItemsToUserList(itemIds: string[] | null) {
     try {
+        console.log("add items to user list");
 
-    if (itemIds=== null) {
-        console.log("no item sent");
-        return;
+        if (itemIds=== null) {
+            console.log("no item sent");
+            return;
+        }
+        const data = {
+            itemIds: itemIds
+        }
+        const authToken = await get_auth_token();
+        if (authToken === undefined) {
+            return {"status" : "error", "message": "No auth token found"}
+        }
+
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/user/watchlist/add`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`
+            },
+        body: JSON.stringify(data),
+        });
+
+
+        if (!resp.ok) {
+            return {"status": "error", "message":`HTTP error! Status: ${resp.status}`,
+            "data": await resp.json()};
+        }
+        // const respData = await resp.json();
+        console.log("revalidating");
+        revalidatePath('/');
+        return {"status": "success", "message": "Items added to watchlist", 
+            "data": await resp.json()};
+
+
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw error;
     }
-    const data = {
-        itemIds: itemIds
-    }
-    const authToken = await get_auth_token();
-    if (authToken === undefined) {
-        return {"status" : "error", "message": "No auth token found"}
-    }
 
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/user/watchlist/add`, {
-       method: 'POST',
-       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`
-        },
-       body: JSON.stringify(data),
-    });
-
-
-    if (!resp.ok) {
-        return {"status": "error", "message":`HTTP error! Status: ${resp.status}`};
-    }
-    // const respData = await resp.json();
-    console.log("revalidating");
-    revalidatePath('/');
-
-
-} catch (error) {
-    console.log(`Error: ${error}`);
-    throw error;
 }
 
+export async function getItemTypeData(apiRoute : string) { 
+    const time : number = Number(process.env.NEXT_PUBLIC_API_CACHE_TIME) || 3600;
+    try {
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/${apiRoute}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            next: {revalidate: time},
+        });
+        if (!resp.ok) {
+            return {"status": "error", "message":`HTTP error! Status: ${resp.status}`,
+            "data": await resp.json()};
+        }
+        return {"status": "success", "message": "Items added to watchlist",
+            "data": await resp.json()};
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw error;
+    }
 }
