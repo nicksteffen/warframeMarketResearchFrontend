@@ -13,7 +13,6 @@ export default function SearchList() {
     const handleSearch = async (query: string) => {
       console.log('Search query:', query);
       // You can add your search logic here
-      const itemsList : ItemsList = {items : []};
       const filter : FilterBody = {
         property_name: "item_name",
         search_term : query,
@@ -31,7 +30,6 @@ export default function SearchList() {
 
       }
 
-      // return itemsList;
     };
 
     return (

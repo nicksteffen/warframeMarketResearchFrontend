@@ -3,7 +3,6 @@ import React, { useState, useCallback} from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Item, ItemsList } from '@/app/types/Item';
-import { addItemsToUserList } from '../actions/userActions';
 import { Box, Button, ListItem } from '@mui/material';
 
 interface ItemSelectorProps  {
@@ -12,7 +11,6 @@ interface ItemSelectorProps  {
 }
 
 export default function ItemSelector({ input_options, onButtonClick } : ItemSelectorProps) {
-  // {input_options: ItemsList} ) {
   const [item, setItem] = useState< Item | null>(null);
 
   const handleChange = (

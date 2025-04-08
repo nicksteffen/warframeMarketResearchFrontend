@@ -2,7 +2,7 @@
 import {ItemsList} from '@/app/types/Item';
 import styles from "@/app/tracking/ItemPage.module.css";
 import ResearchGrid from '@/app/components/ResearchGrid';
-import { ItemType, itemTypes } from '@/app/types/ItemType';
+import { ItemType } from '@/app/types/ItemType';
 // import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import { getItemTypeData } from '@/app/actions/userActions';
