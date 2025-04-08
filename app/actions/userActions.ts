@@ -2,6 +2,13 @@
 import { ItemsList } from "../types/Item";
 import {revalidatePath} from 'next/cache'
 import { cookies } from 'next/headers'
+import { FilterBody } from "../types/FilterBody";
+
+// interface FilterBody {
+//     propertyName : string;
+//     searchString: string;
+//     wildcard: boolean;
+// }
 
 
 export async function deleteItemsFromUserList(items : string[]) {
@@ -161,3 +168,27 @@ export async function getItemTypeData(apiRoute : string) {
         throw error;
     }
 }
+
+export async function getItems(filterBody : FilterBody) { 
+    const time : number = Number(process.env.NEXT_PUBLIC_API_CACHE_TIME) || 3600;
+    try {
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/item/search-items`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(filterBody),
+            next: {revalidate: time},
+        });
+        if (!resp.ok) {
+            return {"status": "error", "message":`HTTP error! Status: ${resp.status}`,
+            "data": await resp.json()};
+        }
+        return {"status": "success", "message": "Items added to watchlist",
+            "data": await resp.json()};
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw error;
+    }
+}
+

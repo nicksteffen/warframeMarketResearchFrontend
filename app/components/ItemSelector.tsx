@@ -30,11 +30,7 @@ export default function ItemSelector({ input_options, onButtonClick } : ItemSele
     console.log("Adding item id");
     console.log(selectedItem._id);
     onButtonClick(selectedItem._id);
-    // try {
-    //   await addItemsToUserList([selectedItem._id]);
-    // } catch (error) {
-    //   console.error('Failed to add item:', error);
-    // }
+
   }, []);
 
   const onClick = useCallback(() => {

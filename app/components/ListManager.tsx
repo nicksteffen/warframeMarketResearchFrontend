@@ -19,7 +19,6 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
     const data : ItemsList = {items: []};
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
     const [user_items, setUserItems] = useState<ItemsList>(data);
-    const [userItemIds, setUserItemsIds] = useState<string[]>([]);
 
     // Alert Snackbar Setup
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -52,7 +51,6 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
         console.log(selectedItemIds);
         deleteItems(selectedItemIds);
     }
-
 
     const deleteOneItem = async (itemId: string) => {
         console.log("delete one item");
@@ -125,8 +123,6 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
             console.error('Failed to add item:', error);
         }
     }
-   
- 
 
     useEffect(() => {
         const token = getCookie('access_token'); // Check if the user is authenticated
