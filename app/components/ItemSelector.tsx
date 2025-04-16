@@ -1,18 +1,23 @@
 "use client";
-import React, { useState, useCallback} from 'react';
+import React, { useState, useCallback, useEffect} from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Item, ItemsList } from '@/app/types/Item';
 import { Box, Button, ListItem } from '@mui/material';
+import { getAllItems } from '../actions/userActions';
 
 interface ItemSelectorProps  {
   onButtonClick: (itemId: string) => void;
-  input_options: ItemsList
+  input_options?: ItemsList ;
+  list_id?: string;
 }
 
-export default function ItemSelector({ input_options, onButtonClick } : ItemSelectorProps) {
+export default function ItemSelector({ list_id, input_options, onButtonClick } : ItemSelectorProps) {
+  const emptyItems: ItemsList = {items: []};
   const [item, setItem] = useState< Item | null>(null);
+  const [allItems, setAllItems] = useState <ItemsList | null>(emptyItems);
 
+  // todo input options remains for now, so that if we want to filter lists at some point, we can
   const handleChange = (
     event: React.SyntheticEvent,
     newItem : Item | null,
@@ -35,12 +40,28 @@ export default function ItemSelector({ input_options, onButtonClick } : ItemSele
     handleAddItem(item);
   }, [handleAddItem, item]);
 
+
+  const getInputOptions = useCallback(async () => {
+    const all_items = await getAllItems();
+    if (all_items) {
+      setAllItems(all_items);
+    } else {
+      setAllItems(emptyItems)
+    }
+
+  }, [])
+
+  useEffect(() => {
+    getInputOptions();
+  }, [getInputOptions]);
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
     <Autocomplete
       autoComplete={true}
       value={item}
-      options={input_options.items}
+      // options={input_options.items}
+      options={allItems.items}
       getOptionLabel={(item) => item.item_name}
         sx={{ width: 300 }}
       onChange={handleChange}

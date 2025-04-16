@@ -13,5 +13,5 @@ export class ItemType {
 export const itemTypes: ItemType[] = [
     new ItemType('prime-parts', 'item/primes', 'Prime Parts'),
     new ItemType('mods', 'item/mods', 'Mods'),
-    new ItemType('test', 'item/mods', 'Test')
+    new ItemType('arcanes', 'item/arcanes', 'Arcanes')
 ];

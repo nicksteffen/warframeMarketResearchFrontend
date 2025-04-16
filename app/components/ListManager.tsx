@@ -5,7 +5,7 @@ import ItemSelector from "@/app/components/ItemSelector";
 // import styles from "@/ItemPage.module.css";
 import { ItemsList } from "@/app/types/Item";
 import { useCallback, useState } from "react";
-import { addItemsToUserList, deleteItemsFromUserList, get_user_watchlist, tester } from "@/app/actions/userActions";
+import { addItemsToList, addItemsToUserList, deleteItemsFromList, deleteItemsFromUserList, get_user_watchlist, tester } from "@/app/actions/userActions";
 import DeleteButton from "@/app/components/DeleteButton";
 import { GridColDef } from "@mui/x-data-grid";
 import { usePathname, useRouter } from 'next/navigation';
@@ -15,7 +15,12 @@ import AccessTokenError from "../errors/AccessTokenError";
 import { getCookie } from "cookies-next";
 import AlertSnackbar from "./AlertSnackbar";
 
-export default function ListManager({all_items } : {all_items: ItemsList}) {
+interface Params {
+    grid_items : ItemsList;
+    list_id : string;
+}
+
+export default function ListManager({list_id, grid_items } : {list_id: string, grid_items: ItemsList}) {
     const data : ItemsList = {items: []};
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
     const [user_items, setUserItems] = useState<ItemsList>(data);
@@ -33,7 +38,8 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
     // todo this should not exist, but when we get a token, we should be handling the user from the cookies on the backend
 
     const deleteItems = async (itemIds : string[]) => {
-        const resp = await deleteItemsFromUserList(itemIds);
+        // const resp = await deleteItemsFromUserList(itemIds);
+        const resp = await deleteItemsFromList(list_id, itemIds);
         if (!resp || resp.status == "error") {
             setSnackbarMessage('Error deleting items');
             setSnackbarSeverity('error');
@@ -56,6 +62,21 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
         console.log("delete one item");
         console.log(itemId);
         deleteItems([itemId]);
+    }
+
+    const addItem = async (item_id: string) => {   
+        try {
+            const data = await addItemsToList(list_id, [item_id])
+            // const data = await addItemsToUserList([item_id]);
+            if (data && data.status === "success") {
+                setSnackbarMessage('Item added successfully');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                // fetchMyItems();
+            }
+        } catch (error) {
+            console.error('Failed to add item:', error);
+        }
     }
 
     const additionalCols : GridColDef[] = [
@@ -110,19 +131,6 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
      }, [router, pathname]);
 
 
-    const addItem = async (item_id: string) => {   
-        try {
-            const data = await addItemsToUserList([item_id]);
-            if (data && data.status === "success") {
-                setSnackbarMessage('Item added successfully');
-                setSnackbarSeverity('success');
-                setSnackbarOpen(true);
-                fetchMyItems();
-            }
-        } catch (error) {
-            console.error('Failed to add item:', error);
-        }
-    }
 
     useEffect(() => {
         const token = getCookie('access_token'); // Check if the user is authenticated
@@ -147,8 +155,8 @@ export default function ListManager({all_items } : {all_items: ItemsList}) {
         />
         <p>My Items</p>
         <Button onClick={testButton}>Test</Button>
-        <ItemSelector input_options={all_items} onButtonClick={addItem}/>
-        <ItemList items={user_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
+        <ItemSelector onButtonClick={addItem}/>
+        <ItemList items={grid_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
         <DeleteButton buttonAction={deleteSelected} buttonText="Delete Selected"></DeleteButton>
         </div>
     )

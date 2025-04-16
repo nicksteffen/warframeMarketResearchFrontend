@@ -1,12 +1,13 @@
 import React from "react";
-import { Home, Widgets, Settings, FormatListBulleted, Login} from '@mui/icons-material'; 
+import { Home, Widgets, Settings, FormatListBulleted, Login, AutoAwesome} from '@mui/icons-material'; 
 
 enum SidelinkNavOrder {
   HOME = 0,
   MODS = 1,
   PRIME_PARTS = 2,
-  MY_LIST = 3,
-  LOGIN = 4
+  ARCANES = 3,
+  LOGIN = 4,
+  MY_LISTS = 5,
 }
 
 interface SideNavLink {
@@ -37,17 +38,22 @@ const SideNavLinks: SideNavLink[] = [
         icon: <Settings/>,
     },
     {
-        order: SidelinkNavOrder.MY_LIST,
-        name: "My List",
-        href: "/tracking/my-list",
-        icon: <FormatListBulleted/>,
-
+        order: SidelinkNavOrder.ARCANES,
+        name: "Arcanes",
+        href: "/tracking/arcanes",
+        icon: <AutoAwesome/>,
     },
     {
        order: SidelinkNavOrder.LOGIN,
         name: "Login",
         href: "/login",
         icon: <Login/>,
+    },
+    {
+       order: SidelinkNavOrder.MY_LISTS,
+       name: "My Lists",
+       href: "/lists",
+       icon: <FormatListBulleted/>,
     },
 
 ]
