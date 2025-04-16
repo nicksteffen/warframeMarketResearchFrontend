@@ -61,7 +61,7 @@ export default function ItemSelector({ list_id, input_options, onButtonClick } :
       autoComplete={true}
       value={item}
       // options={input_options.items}
-      options={allItems.items}
+      options={allItems ? allItems.items : []}
       getOptionLabel={(item) => item.item_name}
         sx={{ width: 300 }}
       onChange={handleChange}

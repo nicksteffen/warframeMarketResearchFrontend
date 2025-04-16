@@ -4,6 +4,7 @@ import {revalidatePath} from 'next/cache'
 import { cookies } from 'next/headers'
 import { FilterBody } from "../types/FilterBody";
 import { UserList } from "../types/UserList";
+import { List } from "@mui/material";
 
 // interface FilterBody {
 //     propertyName : string;
@@ -291,15 +292,21 @@ export async function tester() {
     console.log(data);
 }
 
+interface ListUpdateResponse {
+    status: string;
+    message: string;
+    data?: any;
+}
 
 
-export async function addItemsToList(id: string, itemIds: string[] | null) {
+export async function addItemsToList(id: string, itemIds: string[] | null) : Promise<ListUpdateResponse | null> {
     try {
-        console.log("add items to user list");
+        console.log("add items to defined list with id");
+        console.log(id);
 
         if (itemIds=== null) {
             console.log("no item sent");
-            return;
+            return {"status" : "error", "message": "No items sent"};
         }
         const data = {
             add_items: itemIds
