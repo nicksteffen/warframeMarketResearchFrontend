@@ -4,15 +4,16 @@ import ItemList from "@/app/components/ItemList";
 import ItemSelector from "@/app/components/ItemSelector";
 // import styles from "@/ItemPage.module.css";
 import { ItemsList } from "@/app/types/Item";
-import { useCallback, useState } from "react";
-import { addItemsToList, addItemsToUserList, deleteItemsFromList, deleteItemsFromUserList, get_user_watchlist, tester } from "@/app/actions/userActions";
+// import { useCallback, useState } from "react";
+import { useState } from "react";
+import { addItemsToList, deleteItemsFromList } from "@/app/actions/userActions";
 import DeleteButton from "@/app/components/DeleteButton";
 import { GridColDef } from "@mui/x-data-grid";
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { AlertColor, Button } from "@mui/material";
-import AccessTokenError from "../errors/AccessTokenError";
-import { getCookie } from "cookies-next";
+// import { usePathname, useRouter } from 'next/navigation';
+// import { useEffect } from 'react';
+import { AlertColor } from "@mui/material";
+// import AccessTokenError from "../errors/AccessTokenError";
+// import { getCookie } from "cookies-next";
 import AlertSnackbar from "./AlertSnackbar";
 
 interface Params {
@@ -20,10 +21,10 @@ interface Params {
     list_id : string;
 }
 
-export default function ListManager({list_id, grid_items } : {list_id: string, grid_items: ItemsList}) {
-    const data : ItemsList = {items: []};
+export default function ListManager({list_id, grid_items } : Params) {
+    // const data : ItemsList = {items: []};
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
-    const [user_items, setUserItems] = useState<ItemsList>(data);
+    // const [user_items, setUserItems] = useState<ItemsList>(data);
 
     // Alert Snackbar Setup
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -48,7 +49,7 @@ export default function ListManager({list_id, grid_items } : {list_id: string, g
             setSnackbarMessage(`${itemIds.length ? "Items" : "Item"} deleted successfully`);
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-            fetchMyItems();
+            // fetchMyItems();
         }
     }
 
@@ -89,59 +90,59 @@ export default function ListManager({list_id, grid_items } : {list_id: string, g
             ),
         },
     ];
-    const testButton = () => {
-        console.log("test button");
-        tester();
-    }
-    const router = useRouter();
-    const pathname = usePathname();
+    // const testButton = () => {
+    //     console.log("test button");
+    //     tester();
+    // }
+    // const router = useRouter();
+    // const pathname = usePathname();
 
-    const fetchMyItems = useCallback(async () => {
-        console.log("fetch my items")
-        try {
-            const data = await get_user_watchlist();
+    // const fetchMyItems = useCallback(async () => {
+    //     console.log("fetch my items")
+    //     try {
+    //         const data = await get_user_watchlist();
 
-            if (data.status === "error") {
-                setSnackbarMessage('Redirecting to the Login...');
-                setSnackbarSeverity('info');
-                setSnackbarOpen(true);
-                console.log("error fetching items");
-                setTimeout(() => {
-                    router.push(`/login?redirect=${pathname}`);
-                }, 2000);
+    //         if (data.status === "error") {
+    //             setSnackbarMessage('Redirecting to the Login...');
+    //             setSnackbarSeverity('info');
+    //             setSnackbarOpen(true);
+    //             console.log("error fetching items");
+    //             setTimeout(() => {
+    //                 router.push(`/login?redirect=${pathname}`);
+    //             }, 2000);
                 
-            }
-            console.log("data and list")
-            console.log(data)
-            console.log(data.itemsList);
-            setUserItems(data.itemsList);
-            return {"status": "success"};
-        } catch (error) {
-            if (AccessTokenError.isAccessTokenError(error)) {
-                // Handle access token error, e.g., redirect to login or show an error notifi
-                console.log("access token error");
-            }
-            else {
-                console.log("Undefined error fetching items");
-                console.log(error);
-            }
-            return {"status": "error"};
-        }
+    //         }
+    //         console.log("data and list")
+    //         console.log(data)
+    //         console.log(data.itemsList);
+    //         setUserItems(data.itemsList);
+    //         return {"status": "success"};
+    //     } catch (error) {
+    //         if (AccessTokenError.isAccessTokenError(error)) {
+    //             // Handle access token error, e.g., redirect to login or show an error notifi
+    //             console.log("access token error");
+    //         }
+    //         else {
+    //             console.log("Undefined error fetching items");
+    //             console.log(error);
+    //         }
+    //         return {"status": "error"};
+    //     }
 
-     }, [router, pathname]);
+    //  }, [router, pathname]);
 
 
 
-    useEffect(() => {
-        const token = getCookie('access_token'); // Check if the user is authenticated
-        // const token = Cookies.get('token'); // Check if the user is authenticated
-        if (!token) {
-            // Redirect to login with the current URL as a query parameter
-            const redirectUrl = encodeURIComponent(pathname);
-            router.push(`/login?redirect=${redirectUrl}`);
-        }
-        fetchMyItems();
-    }, [router, pathname, fetchMyItems]);
+    // useEffect(() => {
+    //     const token = getCookie('access_token'); // Check if the user is authenticated
+    //     // const token = Cookies.get('token'); // Check if the user is authenticated
+    //     if (!token) {
+    //         // Redirect to login with the current URL as a query parameter
+    //         const redirectUrl = encodeURIComponent(pathname);
+    //         router.push(`/login?redirect=${redirectUrl}`);
+    //     }
+    //     fetchMyItems();
+    // }, [router, pathname, fetchMyItems]);
 
 
 
@@ -154,7 +155,7 @@ export default function ListManager({list_id, grid_items } : {list_id: string, g
             severity={snackbarSeverity}
         />
         <p>My Items</p>
-        <Button onClick={testButton}>Test</Button>
+        {/* <Button onClick={testButton}>Test</Button> */}
         <ItemSelector onButtonClick={addItem}/>
         <ItemList items={grid_items}  handleSelectionChange={setSelectedItemIds} additionalCols={additionalCols}></ItemList>
         <DeleteButton buttonAction={deleteSelected} buttonText="Delete Selected"></DeleteButton>

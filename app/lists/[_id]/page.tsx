@@ -1,16 +1,13 @@
-import { Typography, CircularProgress, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import ListManager from '@/app/components/ListManager';
 import { getList, getUserListItems } from '@/app/actions/userActions';
 import { UserList } from '@/app/types/UserList';
 import { ItemsList } from '@/app/types/Item';
 
-interface Params {
-  _id: string;
-}
 
-export default async function ListPage({ params }: { params: Params }) {
-  const { _id } = params;
 
+export default async function ListPage({ params }: {params: Promise<{_id : string}>} ) {
+  const _id = (await params)._id;
   // Fetch the UserList
   console.log(`id is ${_id}`);
   const userList : UserList | null = await getList(_id);
@@ -35,6 +32,7 @@ export default async function ListPage({ params }: { params: Params }) {
   if (!itemsList?.items) {
     return (
       <Typography variant="h6" color="error">
+        
         No items found in this list
       </Typography>
     );

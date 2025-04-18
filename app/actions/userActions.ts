@@ -93,7 +93,7 @@ export async function getLists(): Promise<List[] | null> {
 
     }
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/lists`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/lists/${id}`, {
             method: 'DELETE',
         });
   
@@ -295,7 +295,7 @@ export async function tester() {
 interface ListUpdateResponse {
     status: string;
     message: string;
-    data?: any;
+    data?: object;
 }
 
 

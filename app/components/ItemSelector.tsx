@@ -8,11 +8,11 @@ import { getAllItems } from '../actions/userActions';
 
 interface ItemSelectorProps  {
   onButtonClick: (itemId: string) => void;
-  input_options?: ItemsList ;
-  list_id?: string;
+  // input_options?: ItemsList ;
+  // list_id?: string;
 }
 
-export default function ItemSelector({ list_id, input_options, onButtonClick } : ItemSelectorProps) {
+export default function ItemSelector({ onButtonClick } : ItemSelectorProps) {
   const emptyItems: ItemsList = {items: []};
   const [item, setItem] = useState< Item | null>(null);
   const [allItems, setAllItems] = useState <ItemsList | null>(emptyItems);
@@ -34,7 +34,7 @@ export default function ItemSelector({ list_id, input_options, onButtonClick } :
     console.log(selectedItem._id);
     onButtonClick(selectedItem._id);
 
-  }, []);
+  }, [onButtonClick]);
 
   const onClick = useCallback(() => {
     handleAddItem(item);
@@ -42,6 +42,7 @@ export default function ItemSelector({ list_id, input_options, onButtonClick } :
 
 
   const getInputOptions = useCallback(async () => {
+    const emptyItems: ItemsList = {items: []};
     const all_items = await getAllItems();
     if (all_items) {
       setAllItems(all_items);

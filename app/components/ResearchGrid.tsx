@@ -3,7 +3,7 @@ import { AlertColor, Button } from "@mui/material";
 import { ItemsList } from "../types/Item";
 import ItemList from "./ItemList";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { addItemsToList, addItemsToUserList } from "../actions/userActions";
+import { addItemsToList } from "../actions/userActions";
 import { useState } from "react";
 import AlertSnackbar from "./AlertSnackbar";
 import ListsDropdown from "./ListsDropdown";
