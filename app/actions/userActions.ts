@@ -95,6 +95,10 @@ export async function getLists(): Promise<List[] | null> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/lists/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+
+            }
         });
   
         if (!response.ok) throw new Error('Failed to delete list')
