@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Drawer, List, IconButton, Box} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import styles from "./SideNav.module.css";
+import LogoutButton from './components/LogoutButton';
 
 
 
@@ -30,6 +31,8 @@ export default function SideNav() {
                         <NavLinks/>
                     </List>
                 </Box>
+
+                <LogoutButton/>
             </Drawer>
 
         

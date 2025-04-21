@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { Delete, ArrowForward } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
-import { getLists, createList, deleteList } from '@/app/actions/userActions'
+import { getLists, createList, deleteList } from '@/app/actions/listActions'
 import Grid from '@mui/material/Grid2';
 
 interface List {
@@ -86,10 +86,7 @@ export default function ListsPage() {
                   <IconButton
                     color="primary"
                     onClick={() => router.push(`/lists/${list._id}`)}
-                    // onClick={() => {
-                        // console.log(list);
-                        // console.log(list._id);
-                    // }}
+  
                   >
                     <ArrowForward />
                   </IconButton>

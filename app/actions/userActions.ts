@@ -32,7 +32,7 @@ export async function getAllItems(): Promise<ItemsList | null> {
 
 export async function getLists(): Promise<List[] | null> {
 
-    const authToken =await get_auth_token();
+    const authToken = await get_auth_token();
     if (authToken === undefined) {
         // todo define auth error here to catch and redirect to login
         console.log("throwing access token error");
